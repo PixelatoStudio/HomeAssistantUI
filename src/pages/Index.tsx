@@ -34,6 +34,7 @@ import { TemperatureControl } from "@/components/TemperatureControl";
 import { WeatherCard } from "@/components/WeatherCard";
 import { EnergyCard } from "@/components/EnergyCard";
 import { SprinklerCard } from "@/components/SprinklerCard";
+import { TeslaSolarCard } from "@/components/TeslaSolarCard";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
@@ -243,7 +244,13 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {selectedRoom === "home" ? (
             <>
-              {/* Home Controls */}
+              {/* Tesla Solar Card - spans 2 columns */}
+              <TeslaSolarCard
+                powerGenerated={8.4}
+                powerConsumed={5.2}
+                powerExported={3.2}
+                status="generating"
+              />
 
               {/* Climate and Energy Row */}
               <TemperatureControl
