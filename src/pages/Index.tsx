@@ -16,7 +16,8 @@ import {
   Lock,
   Fan,
   Speaker,
-  Trees
+  Trees,
+  Image
 } from "lucide-react";
 
 // Import room images
@@ -33,6 +34,8 @@ import { TemperatureControl } from "@/components/TemperatureControl";
 import { WeatherCard } from "@/components/WeatherCard";
 import { EnergyCard } from "@/components/EnergyCard";
 import { SprinklerCard } from "@/components/SprinklerCard";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 // Types
 interface Room {
@@ -64,6 +67,7 @@ interface SprinklerZone {
 const Index = () => {
   // State management
   const [selectedRoom, setSelectedRoom] = useState<string>("home");
+  const [showBackgroundImage, setShowBackgroundImage] = useState<boolean>(true);
   const [devices, setDevices] = useState<Record<string, Device[]>>({
     living: [
       { id: "1", name: "Main Light", icon: Lightbulb, isActive: true, type: "light", intensity: 85 },
@@ -180,14 +184,14 @@ const Index = () => {
   return (
     <div 
       className="min-h-screen bg-background p-6 animate-fade-in relative"
-      style={{
+      style={showBackgroundImage ? {
         backgroundImage: `url(${livingRoomImg})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed'
-      }}
+      } : {}}
     >
-      <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />
+      {showBackgroundImage && <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />}
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
@@ -195,7 +199,18 @@ const Index = () => {
             <h1 className="text-3xl font-montserrat font-semibold text-primary">linx</h1>
             <p className="text-muted-foreground">Welcome back! Manage your connected devices</p>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <Image className="h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="background-toggle" className="text-sm text-muted-foreground">Background</Label>
+              <Switch
+                id="background-toggle"
+                checked={showBackgroundImage}
+                onCheckedChange={setShowBackgroundImage}
+              />
+            </div>
+            <ThemeToggle />
+          </div>
         </header>
 
         {/* Horizontal Tab Navigation */}
