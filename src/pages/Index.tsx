@@ -198,7 +198,7 @@ const Index = () => {
         <header className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-montserrat font-normal text-foreground">linx home automation</h1>
-            <p className="text-muted-foreground">Welcome back! Manage your connected devices</p>
+            <p className="text-muted-foreground">Welcome back, Reed!</p>
           </div>
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
