@@ -8,35 +8,56 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Smart Home Dashboard Design System */
+    --background: 210 15% 97%;
+    --foreground: 220 13% 18%;
 
+    /* Glassmorphic cards */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --card-foreground: 220 13% 18%;
+    --card-glass: 220 13% 98%;
+    
+    /* Smart home primary colors */
+    --primary: 158 64% 52%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 158 64% 65%;
+    
+    /* Accent colors for devices */
+    --accent: 88 67% 54%;
+    --accent-foreground: 0 0% 100%;
+    --accent-soft: 88 67% 95%;
+    
+    /* Secondary colors */
+    --secondary: 220 13% 94%;
+    --secondary-foreground: 220 13% 18%;
+    
+    /* Muted colors */
+    --muted: 220 13% 95%;
+    --muted-foreground: 220 9% 46%;
+    
+    /* Status colors */
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Interactive elements */
+    --border: 220 13% 91%;
+    --input: 220 13% 94%;
+    --ring: 158 64% 52%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    --gradient-device: linear-gradient(135deg, hsl(var(--accent)), hsl(88 67% 65%));
+    
+    /* Shadows */
+    --shadow-glass: 0 8px 32px rgba(0,0,0,0.1);
+    --shadow-device: 0 4px 20px rgba(139, 195, 74, 0.3);
+    --shadow-hover: 0 12px 40px rgba(0,0,0,0.15);
+    
+    /* Border radius */
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -56,33 +77,53 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark mode smart home colors */
+    --background: 220 18% 12%;
+    --foreground: 220 8% 92%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    /* Dark glassmorphic cards */
+    --card: 220 15% 15%;
+    --card-foreground: 220 8% 92%;
+    --card-glass: 220 15% 18%;
+    
+    /* Dark primary colors */
+    --primary: 158 64% 58%;
+    --primary-foreground: 220 18% 12%;
+    --primary-glow: 158 64% 70%;
+    
+    /* Dark accent colors */
+    --accent: 88 67% 60%;
+    --accent-foreground: 220 18% 12%;
+    --accent-soft: 88 67% 15%;
+    
+    /* Dark secondary */
+    --secondary: 220 15% 18%;
+    --secondary-foreground: 220 8% 92%;
+    
+    /* Dark muted */
+    --muted: 220 15% 16%;
+    --muted-foreground: 220 8% 70%;
+    
+    /* Dark status colors */
+    --success: 142 71% 50%;
+    --warning: 38 92% 55%;
+    --destructive: 0 84% 65%;
+    --destructive-foreground: 220 18% 12%;
+    
+    /* Dark interactive */
+    --border: 220 15% 22%;
+    --input: 220 15% 18%;
+    --ring: 158 64% 58%;
+    
+    /* Dark gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    --gradient-device: linear-gradient(135deg, hsl(var(--accent)), hsl(88 67% 70%));
+    
+    /* Dark shadows */
+    --shadow-glass: 0 8px 32px rgba(0,0,0,0.4);
+    --shadow-device: 0 4px 20px rgba(139, 195, 74, 0.2);
+    --shadow-hover: 0 12px 40px rgba(0,0,0,0.6);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -100,6 +141,48 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    background: linear-gradient(135deg, hsl(var(--background)), hsl(210 15% 94%));
+  }
+  
+  .dark body {
+    background: linear-gradient(135deg, hsl(var(--background)), hsl(220 18% 8%));
+  }
+}
+
+@layer components {
+  /* Glass card component */
+  .glass-card {
+    @apply backdrop-blur-lg bg-card-glass/50 border border-white/10 shadow-[var(--shadow-glass)] rounded-[var(--radius)];
+  }
+  
+  /* Device card styling */
+  .device-card {
+    @apply glass-card hover:shadow-[var(--shadow-hover)] transition-all duration-300 p-6 cursor-pointer;
+  }
+  
+  /* Smart toggle styling */
+  .smart-toggle {
+    @apply relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200;
+    background: var(--gradient-device);
+  }
+  
+  /* Gradient text */
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Room thumbnail styling */
+  .room-thumbnail {
+    @apply relative overflow-hidden rounded-xl h-24 w-full bg-gradient-to-br from-primary/20 to-accent/20;
+  }
+  
+  /* Status indicator */
+  .status-active {
+    @apply bg-accent text-accent-foreground;
+    box-shadow: var(--shadow-device);
   }
 }
