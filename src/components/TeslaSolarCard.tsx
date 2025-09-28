@@ -19,7 +19,7 @@ export function TeslaSolarCard({
     <div className="device-card col-span-2">
       <div className="flex items-center gap-3 mb-4">
         <div className="p-2 rounded-lg bg-muted">
-          <Sun className="h-5 w-5 text-accent" />
+          <Sun className="h-5 w-5 text-muted-foreground" />
         </div>
         <div>
           <h3 className="font-semibold">Tesla Solar</h3>
