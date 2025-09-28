@@ -12,21 +12,21 @@ export function WeatherCard({ location, temperature, condition, humidity, windSp
   const getWeatherIcon = () => {
     switch (condition) {
       case 'sunny':
-        return <Sun className="h-6 w-6 text-yellow-500" />;
+        return <Sun className="h-6 w-6 text-muted-foreground" />;
       case 'cloudy':
-        return <Cloud className="h-6 w-6 text-gray-500" />;
+        return <Cloud className="h-6 w-6 text-muted-foreground" />;
       case 'rainy':
-        return <CloudRain className="h-6 w-6 text-blue-500" />;
+        return <CloudRain className="h-6 w-6 text-muted-foreground" />;
       default:
-        return <Sun className="h-6 w-6 text-yellow-500" />;
+        return <Sun className="h-6 w-6 text-muted-foreground" />;
     }
   };
 
   return (
     <div className="device-card">
       <div className="flex items-center gap-2 mb-3">
-        <div className="p-1.5 rounded-lg bg-primary text-primary-foreground">
-          <MapPin className="h-4 w-4" />
+        <div className="p-2 rounded-lg bg-muted">
+          <MapPin className="h-5 w-5 text-muted-foreground" />
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-sm truncate">Weather</h3>
@@ -46,11 +46,11 @@ export function WeatherCard({ location, temperature, condition, humidity, windSp
       
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div className="flex items-center gap-1">
-          <Droplets className="h-3 w-3 text-blue-500" />
+          <Droplets className="h-3 w-3 text-muted-foreground" />
           <span className="text-muted-foreground">{humidity}%</span>
         </div>
         <div className="flex items-center gap-1">
-          <Wind className="h-3 w-3 text-gray-500" />
+          <Wind className="h-3 w-3 text-muted-foreground" />
           <span className="text-muted-foreground">{windSpeed} km/h</span>
         </div>
       </div>

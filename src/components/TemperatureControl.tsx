@@ -25,8 +25,8 @@ export function TemperatureControl({ location, currentTemp, targetTemp, onTempCh
     <div className="device-card">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-primary text-primary-foreground">
-            <Thermometer className="h-4 w-4" />
+          <div className="p-2 rounded-lg bg-muted">
+            <Thermometer className="h-5 w-5 text-muted-foreground" />
           </div>
           <div>
             <h3 className="font-semibold text-sm">{location}</h3>
@@ -39,7 +39,7 @@ export function TemperatureControl({ location, currentTemp, targetTemp, onTempCh
             variant="ghost"
             size="sm"
             onClick={() => setMode(mode === 'heat' ? 'cool' : 'heat')}
-            className={`p-1 rounded-md h-6 w-6 ${mode === 'heat' ? 'text-orange-500' : 'text-blue-500'}`}
+            className="p-1 rounded-md h-6 w-6 text-muted-foreground"
           >
             {mode === 'heat' ? <Flame className="h-3 w-3" /> : <Snowflake className="h-3 w-3" />}
           </Button>

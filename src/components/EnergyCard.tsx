@@ -11,8 +11,8 @@ export function EnergyCard({ currentUsage, dailyUsage, weeklyTrend, cost }: Ener
   return (
     <div className="device-card">
       <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 rounded-lg bg-warning text-white">
-          <Zap className="h-5 w-5" />
+        <div className="p-2 rounded-lg bg-muted">
+          <Zap className="h-5 w-5 text-muted-foreground" />
         </div>
         <div>
           <h3 className="font-semibold">Energy Usage</h3>
@@ -39,9 +39,9 @@ export function EnergyCard({ currentUsage, dailyUsage, weeklyTrend, cost }: Ener
             <div className="flex items-center gap-1">
               <span className="font-medium">${cost}</span>
               {weeklyTrend === "up" ? (
-                <TrendingUp className="h-3 w-3 text-red-500" />
+                <TrendingUp className="h-3 w-3 text-muted-foreground" />
               ) : (
-                <TrendingDown className="h-3 w-3 text-green-500" />
+                <TrendingDown className="h-3 w-3 text-muted-foreground" />
               )}
             </div>
           </div>
