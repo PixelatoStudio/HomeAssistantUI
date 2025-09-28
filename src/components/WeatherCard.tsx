@@ -38,7 +38,7 @@ export function WeatherCard({ location, temperature, condition, humidity, windSp
         <div className="flex items-center gap-2">
           {getWeatherIcon()}
           <div>
-            <div className="text-xl font-bold gradient-text">{temperature}°C</div>
+            <div className="text-xl font-bold text-accent">{temperature}°C</div>
             <div className="text-xs text-muted-foreground capitalize">{condition}</div>
           </div>
         </div>

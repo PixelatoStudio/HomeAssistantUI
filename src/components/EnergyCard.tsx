@@ -23,7 +23,7 @@ export function EnergyCard({ currentUsage, dailyUsage, weeklyTrend, cost }: Ener
       <div className="space-y-3">
         <div>
           <div className="flex items-end gap-1">
-            <span className="text-2xl font-bold gradient-text">{currentUsage}</span>
+            <span className="text-2xl font-bold text-accent">{currentUsage}</span>
             <span className="text-sm text-muted-foreground">kW</span>
           </div>
           <p className="text-xs text-muted-foreground">Current consumption</p>
