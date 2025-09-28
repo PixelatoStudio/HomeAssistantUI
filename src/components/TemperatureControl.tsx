@@ -62,15 +62,15 @@ export function TemperatureControl({ location, currentTemp, targetTemp, onTempCh
               cx="50"
               cy="50"
               r="40"
-              stroke="hsl(var(--primary))"
+              stroke={isOn ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))"}
               strokeWidth="4"
               fill="transparent"
               strokeDasharray={`${(target / 30) * 251.32} 251.32`}
-              className="transition-all duration-300"
+              className={`transition-all duration-300 ${!isOn ? 'opacity-40' : ''}`}
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-2xl font-bold gradient-text">{target}</span>
+            <span className={`text-2xl font-bold ${isOn ? 'gradient-text' : 'text-muted-foreground'}`}>{target}</span>
             <span className="text-xs text-muted-foreground">°C</span>
           </div>
         </div>
@@ -81,7 +81,8 @@ export function TemperatureControl({ location, currentTemp, targetTemp, onTempCh
           variant="ghost"
           size="icon"
           onClick={() => adjustTemp(-1)}
-          className="glass-card h-8 w-8"
+          disabled={!isOn}
+          className="glass-card h-8 w-8 disabled:opacity-50"
         >
           <Minus className="h-4 w-4" />
         </Button>
@@ -89,7 +90,8 @@ export function TemperatureControl({ location, currentTemp, targetTemp, onTempCh
           variant="ghost"
           size="icon"
           onClick={() => adjustTemp(1)}
-          className="glass-card h-8 w-8"
+          disabled={!isOn}
+          className="glass-card h-8 w-8 disabled:opacity-50"
         >
           <Plus className="h-4 w-4" />
         </Button>
