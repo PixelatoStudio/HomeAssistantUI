@@ -15,7 +15,8 @@ import {
   Thermometer,
   Lock,
   Fan,
-  Speaker
+  Speaker,
+  Trees
 } from "lucide-react";
 
 // Import room images
@@ -93,6 +94,10 @@ const Index = () => {
       { id: "17", name: "Garage Light", icon: Lightbulb, isActive: false, type: "light" },
       { id: "18", name: "Door Sensor", icon: Shield, isActive: true, type: "security" },
       { id: "19", name: "Garage Door", subtitle: "MyQ", icon: Car, isActive: false, type: "access" }
+    ],
+    yard: [
+      { id: "20", name: "Yard Light", subtitle: "LED Floodlight", icon: Lightbulb, isActive: false, type: "light" },
+      { id: "21", name: "Garden Path", subtitle: "Solar Lights", icon: Lightbulb, isActive: true, type: "light" }
     ]
   });
 
@@ -118,7 +123,8 @@ const Index = () => {
     { id: "kitchen", name: "Kitchen", icon: ChefHat, deviceCount: devices.kitchen?.length || 0, devices: devices.kitchen || [] },
     { id: "bathroom", name: "Bathroom", icon: Bath, deviceCount: devices.bathroom?.length || 0, devices: devices.bathroom || [] },
     { id: "office", name: "Office", icon: Thermometer, deviceCount: devices.office?.length || 0, devices: devices.office || [] },
-    { id: "garage", name: "Garage", icon: Car, deviceCount: devices.garage?.length || 0, devices: devices.garage || [] }
+    { id: "garage", name: "Garage", icon: Car, deviceCount: devices.garage?.length || 0, devices: devices.garage || [] },
+    { id: "yard", name: "Yard", icon: Trees, deviceCount: devices.yard?.length || 0, devices: devices.yard || [] }
   ];
 
   // Event handlers
@@ -170,7 +176,8 @@ const Index = () => {
 
         {/* Horizontal Tab Navigation */}
         <div className="mb-8">
-          <div className="flex gap-2 p-1 bg-muted/50 rounded-xl backdrop-blur-lg">
+          <div className="flex gap-2 p-1 bg-muted/50 rounded-xl backdrop-blur-lg overflow-x-auto scrollbar-hide">
+            <div className="flex gap-2 min-w-max">
             {rooms.map((room) => {
               const Icon = room.icon;
               const isSelected = selectedRoom === room.id;
@@ -179,7 +186,7 @@ const Index = () => {
                 <button
                   key={room.id}
                   onClick={() => setSelectedRoom(room.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 whitespace-nowrap ${
                     isSelected 
                       ? 'bg-primary text-primary-foreground shadow-lg' 
                       : 'hover:bg-white/50 dark:hover:bg-white/10'
@@ -195,6 +202,7 @@ const Index = () => {
                 </button>
               );
             })}
+            </div>
           </div>
         </div>
 
@@ -225,7 +233,7 @@ const Index = () => {
                 cost={3.42}
               />
 
-              {/* Weather and Sprinkler Row */}
+              {/* Weather Row */}
               <WeatherCard
                 location="New York, NY"
                 temperature={28}
@@ -233,12 +241,30 @@ const Index = () => {
                 humidity={65}
                 windSpeed={12}
               />
-
+            </>
+          ) : selectedRoom === "yard" ? (
+            <>
+              {/* Yard Controls */}
               <SprinklerCard
                 zones={sprinklerZones}
                 onZoneToggle={toggleSprinklerZone}
               />
-
+              
+              {/* Yard Devices */}
+              <div className="md:col-span-2 lg:col-span-3">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  {currentDevices.map((device) => (
+                    <DeviceCard
+                      key={device.id}
+                      name={device.name}
+                      subtitle={device.subtitle}
+                      icon={device.icon}
+                      isActive={device.isActive}
+                      onToggle={() => toggleDevice(device.id)}
+                    />
+                  ))}
+                </div>
+              </div>
             </>
           ) : (
             <>
