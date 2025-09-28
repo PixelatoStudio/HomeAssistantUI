@@ -21,8 +21,8 @@ export function SprinklerCard({ zones, onZoneToggle }: SprinklerCardProps) {
     <div className="device-card col-span-2">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-blue-500 text-white">
-            <Droplets className="h-5 w-5" />
+          <div className="p-2 rounded-lg bg-muted">
+            <Droplets className="h-5 w-5 text-muted-foreground" />
           </div>
           <div>
             <h3 className="font-semibold">Sprinkler System</h3>
@@ -40,7 +40,7 @@ export function SprinklerCard({ zones, onZoneToggle }: SprinklerCardProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => onZoneToggle(zone.id)}
-                className={`h-6 w-6 ${zone.isActive ? "text-blue-500" : "text-muted-foreground"}`}
+                className="h-6 w-6 text-muted-foreground"
               >
                 {zone.isActive ? <Square className="h-3 w-3" /> : <Play className="h-3 w-3" />}
               </Button>
