@@ -202,9 +202,6 @@ const Index = () => {
           {selectedRoom === "home" ? (
             <>
               {/* Home Controls */}
-              <h2 className="text-lg font-semibold mb-4 md:col-span-2 lg:col-span-3">
-                Home Controls
-              </h2>
 
               {/* Climate and Energy Row */}
               <TemperatureControl
@@ -247,9 +244,6 @@ const Index = () => {
             <>
               {/* Room Devices */}
               <div className="md:col-span-2 lg:col-span-3">
-                <h2 className="text-lg font-semibold mb-4">
-                  {selectedRoomData?.name} Devices
-                </h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                   {currentDevices.map((device) => (
                     <DeviceCard
