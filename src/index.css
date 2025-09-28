@@ -44,7 +44,7 @@ All colors MUST be HSL.
     /* Interactive elements */
     --border: 220 13% 91%;
     --input: 220 13% 94%;
-    --ring: 158 64% 52%;
+    --ring: 255 84% 67%;
     
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
@@ -86,10 +86,10 @@ All colors MUST be HSL.
     --card-foreground: 220 8% 92%;
     --card-glass: 220 15% 18%;
     
-    /* Dark primary colors */
-    --primary: 158 64% 58%;
+    /* Dark primary colors - Purple theme to match reference */
+    --primary: 255 84% 67%;
     --primary-foreground: 220 18% 12%;
-    --primary-glow: 158 64% 70%;
+    --primary-glow: 255 84% 80%;
     
     /* Dark accent colors */
     --accent: 88 67% 60%;
@@ -113,7 +113,7 @@ All colors MUST be HSL.
     /* Dark interactive */
     --border: 220 15% 22%;
     --input: 220 15% 18%;
-    --ring: 158 64% 58%;
+    --ring: 255 84% 67%;
     
     /* Dark gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
