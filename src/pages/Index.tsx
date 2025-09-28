@@ -241,18 +241,10 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {selectedRoom === "home" ? (
             <>
-              {/* Tesla Solar Card - spans 2 columns */}
-              <TeslaSolarCard
-                powerGenerated={8.4}
-                powerConsumed={5.2}
-                powerExported={3.2}
-                status="generating"
-              />
-
-              {/* Climate and Energy Row */}
+              {/* Top Row: Temperature Controls and Weather */}
               <TemperatureControl
                 location="Upstairs"
                 currentTemp={temperatures.upstairs.current}
@@ -267,20 +259,27 @@ const Index = () => {
                 onTempChange={(temp) => handleTempChange('downstairs', temp)}
               />
 
-              <EnergyCard
-                currentUsage={2.4}
-                dailyUsage={24.8}
-                weeklyTrend="down"
-                cost={3.42}
-              />
-
-              {/* Weather Row */}
               <WeatherCard
                 location="New York, NY"
                 temperature={28}
                 condition="sunny"
                 humidity={65}
                 windSpeed={12}
+              />
+
+              {/* Bottom Row: Tesla Solar (2 columns) + Energy Usage */}
+              <TeslaSolarCard
+                powerGenerated={8.4}
+                powerConsumed={5.2}
+                powerExported={3.2}
+                status="generating"
+              />
+
+              <EnergyCard
+                currentUsage={2.4}
+                dailyUsage={24.8}
+                weeklyTrend="down"
+                cost={3.42}
               />
             </>
           ) : selectedRoom === "yard" ? (
