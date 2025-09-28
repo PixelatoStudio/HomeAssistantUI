@@ -142,7 +142,7 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-sans;
-    background: linear-gradient(135deg, hsl(var(--background)), hsl(210 15% 94%));
+    background: linear-gradient(135deg, hsl(210 15% 97%), hsl(210 15% 92%));
   }
   
   .dark body {
@@ -153,27 +153,29 @@ All colors MUST be HSL.
 @layer components {
   /* Glass card component with enhanced glassmorphism */
   .glass-card {
-    @apply backdrop-blur-xl bg-white/10 border border-white/20 shadow-[var(--shadow-glass)] rounded-[var(--radius)];
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    @apply backdrop-blur-xl border shadow-[var(--shadow-glass)] rounded-[var(--radius)];
+    background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.4));
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
   
   .dark .glass-card {
-    @apply bg-white/5 border-white/10;
     background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   /* Device card styling with enhanced glass effect */
   .device-card {
     @apply glass-card hover:shadow-[var(--shadow-hover)] transition-all duration-300 p-6 cursor-pointer;
-    border: 1px solid rgba(255, 255, 255, 0.18);
   }
   
   .device-card:hover {
-    background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
+    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.5));
+    border: 1px solid rgba(255, 255, 255, 0.4);
   }
   
   .dark .device-card:hover {
     background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+    border: 1px solid rgba(255, 255, 255, 0.15);
   }
   
   /* Smart toggle styling */
