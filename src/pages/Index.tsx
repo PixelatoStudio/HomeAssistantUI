@@ -218,12 +218,7 @@ const Index = () => {
                 >
                    <Icon className="h-4 w-4 text-muted-foreground" />
                    <span className="font-medium text-sm">{room.name}</span>
-                  {room.deviceCount > 0 && !isSelected && (
-                    <span className="bg-muted-foreground/20 text-xs px-1.5 py-0.5 rounded-full">
-                      {room.deviceCount}
-                    </span>
-                  )}
-                </button>
+                 </button>
               );
             })}
             </div>
