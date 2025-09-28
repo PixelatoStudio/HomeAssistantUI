@@ -192,7 +192,7 @@ const Index = () => {
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-montserrat font-semibold text-muted-foreground">linx</h1>
+            <h1 className="text-3xl font-montserrat font-semibold text-primary">linx</h1>
             <p className="text-muted-foreground">Welcome back! Manage your connected devices</p>
           </div>
           <ThemeToggle />

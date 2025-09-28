@@ -17,10 +17,10 @@ All colors MUST be HSL.
     --card-foreground: 220 13% 18%;
     --card-glass: 220 13% 98%;
     
-    /* Smart home primary colors */
-    --primary: 158 64% 52%;
+    /* Smart home primary colors - Purple theme to match reference */
+    --primary: 255 84% 67%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 158 64% 65%;
+    --primary-glow: 255 84% 80%;
     
     /* Accent colors for devices */
     --accent: 88 67% 54%;
