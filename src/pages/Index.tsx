@@ -163,8 +163,17 @@ const Index = () => {
   const currentDevices = selectedRoom === "home" ? [] : devices[selectedRoom] || [];
 
   return (
-    <div className="min-h-screen bg-background p-6 animate-fade-in">
-      <div className="max-w-7xl mx-auto">
+    <div 
+      className="min-h-screen bg-background p-6 animate-fade-in relative"
+      style={{
+        backgroundImage: `url(${livingRoomImg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
           <div>
