@@ -206,6 +206,11 @@ All colors MUST be HSL.
     box-shadow: var(--shadow-device);
   }
   
+  /* Force device icons to always be neutral */
+  .status-active svg {
+    color: hsl(var(--muted-foreground)) !important;
+  }
+  
   /* Hide scrollbar */
   .scrollbar-hide {
     -ms-overflow-style: none;
