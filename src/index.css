@@ -151,14 +151,29 @@ All colors MUST be HSL.
 }
 
 @layer components {
-  /* Glass card component */
+  /* Glass card component with enhanced glassmorphism */
   .glass-card {
-    @apply backdrop-blur-lg bg-card-glass/50 border border-white/10 shadow-[var(--shadow-glass)] rounded-[var(--radius)];
+    @apply backdrop-blur-xl bg-white/10 border border-white/20 shadow-[var(--shadow-glass)] rounded-[var(--radius)];
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
   }
   
-  /* Device card styling */
+  .dark .glass-card {
+    @apply bg-white/5 border-white/10;
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  }
+  
+  /* Device card styling with enhanced glass effect */
   .device-card {
     @apply glass-card hover:shadow-[var(--shadow-hover)] transition-all duration-300 p-6 cursor-pointer;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  
+  .device-card:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
+  }
+  
+  .dark .device-card:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
   }
   
   /* Smart toggle styling */
