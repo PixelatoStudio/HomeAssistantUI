@@ -1,4 +1,5 @@
 import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
 import { LucideIcon } from "lucide-react";
 
 interface DeviceCardProps {
@@ -8,9 +9,12 @@ interface DeviceCardProps {
   isActive: boolean;
   onToggle: () => void;
   size?: "default" | "large";
+  type?: string;
+  intensity?: number;
+  onIntensityChange?: (value: number[]) => void;
 }
 
-export function DeviceCard({ name, subtitle, icon: Icon, isActive, onToggle, size = "default" }: DeviceCardProps) {
+export function DeviceCard({ name, subtitle, icon: Icon, isActive, onToggle, size = "default", type, intensity = 100, onIntensityChange }: DeviceCardProps) {
   return (
     <div className={`device-card group ${size === "large" ? "col-span-2" : ""}`}>
       <div className="flex flex-col items-start gap-3 h-full">
@@ -35,6 +39,24 @@ export function DeviceCard({ name, subtitle, icon: Icon, isActive, onToggle, siz
             className="scale-90"
           />
         </div>
+        
+        {/* Intensity Slider for Light devices */}
+        {type === "light" && isActive && onIntensityChange && (
+          <div className="w-full space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-muted-foreground">Intensity</span>
+              <span className="text-xs text-muted-foreground">{intensity}%</span>
+            </div>
+            <Slider
+              value={[intensity]}
+              onValueChange={onIntensityChange}
+              max={100}
+              min={0}
+              step={1}
+              className="w-full"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

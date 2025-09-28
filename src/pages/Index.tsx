@@ -51,6 +51,7 @@ interface Device {
   icon: any;
   isActive: boolean;
   type: string;
+  intensity?: number;
 }
 
 interface SprinklerZone {
@@ -65,39 +66,39 @@ const Index = () => {
   const [selectedRoom, setSelectedRoom] = useState<string>("home");
   const [devices, setDevices] = useState<Record<string, Device[]>>({
     living: [
-      { id: "1", name: "Main Light", icon: Lightbulb, isActive: true, type: "light" },
+      { id: "1", name: "Main Light", icon: Lightbulb, isActive: true, type: "light", intensity: 85 },
       { id: "2", name: "Smart TV", subtitle: "Samsung 65\"", icon: Tv, isActive: false, type: "entertainment" },
       { id: "3", name: "Sound System", subtitle: "Sonos Beam", icon: Speaker, isActive: true, type: "entertainment" },
       { id: "4", name: "Ceiling Fan", icon: Fan, isActive: false, type: "climate" }
     ],
     bedroom: [
-      { id: "5", name: "Bedside Lamp", icon: Lightbulb, isActive: false, type: "light" },
+      { id: "5", name: "Bedside Lamp", icon: Lightbulb, isActive: false, type: "light", intensity: 50 },
       { id: "6", name: "Smart Lock", subtitle: "Front Door", icon: Lock, isActive: true, type: "security" },
       { id: "7", name: "Air Purifier", icon: Fan, isActive: true, type: "climate" }
     ],
     kitchen: [
-      { id: "8", name: "Under Cabinet", icon: Lightbulb, isActive: true, type: "light" },
+      { id: "8", name: "Under Cabinet", icon: Lightbulb, isActive: true, type: "light", intensity: 90 },
       { id: "9", name: "Smart Speaker", subtitle: "Alexa Echo", icon: Volume2, isActive: false, type: "entertainment" },
       { id: "10", name: "Security Camera", icon: Camera, isActive: true, type: "security" }
     ],
     bathroom: [
-      { id: "11", name: "Mirror Light", icon: Lightbulb, isActive: false, type: "light" },
+      { id: "11", name: "Mirror Light", icon: Lightbulb, isActive: false, type: "light", intensity: 75 },
       { id: "12", name: "Exhaust Fan", icon: Fan, isActive: false, type: "climate" },
       { id: "13", name: "Motion Sensor", icon: Shield, isActive: true, type: "security" }
     ],
     office: [
-      { id: "14", name: "Desk Lamp", icon: Lightbulb, isActive: true, type: "light" },
+      { id: "14", name: "Desk Lamp", icon: Lightbulb, isActive: true, type: "light", intensity: 65 },
       { id: "15", name: "WiFi Router", subtitle: "Mesh Pro", icon: Wifi, isActive: true, type: "network" },
       { id: "16", name: "Smart Display", icon: Tv, isActive: false, type: "entertainment" }
     ],
     garage: [
-      { id: "17", name: "Garage Light", icon: Lightbulb, isActive: false, type: "light" },
+      { id: "17", name: "Garage Light", icon: Lightbulb, isActive: false, type: "light", intensity: 100 },
       { id: "18", name: "Door Sensor", icon: Shield, isActive: true, type: "security" },
       { id: "19", name: "Garage Door", subtitle: "MyQ", icon: Car, isActive: false, type: "access" }
     ],
     yard: [
-      { id: "20", name: "Yard Light", subtitle: "LED Floodlight", icon: Lightbulb, isActive: false, type: "light" },
-      { id: "21", name: "Garden Path", subtitle: "Solar Lights", icon: Lightbulb, isActive: true, type: "light" }
+      { id: "20", name: "Yard Light", subtitle: "LED Floodlight", icon: Lightbulb, isActive: false, type: "light", intensity: 80 },
+      { id: "21", name: "Garden Path", subtitle: "Solar Lights", icon: Lightbulb, isActive: true, type: "light", intensity: 40 }
     ]
   });
 
@@ -135,6 +136,20 @@ const Index = () => {
         newDevices[roomId] = newDevices[roomId].map(device => 
           device.id === deviceId 
             ? { ...device, isActive: !device.isActive }
+            : device
+        );
+      });
+      return newDevices;
+    });
+  };
+
+  const handleIntensityChange = (deviceId: string, intensity: number[]) => {
+    setDevices(prev => {
+      const newDevices = { ...prev };
+      Object.keys(newDevices).forEach(roomId => {
+        newDevices[roomId] = newDevices[roomId].map(device => 
+          device.id === deviceId 
+            ? { ...device, intensity: intensity[0] }
             : device
         );
       });
@@ -263,14 +278,17 @@ const Index = () => {
               <div className="md:col-span-2 lg:col-span-3">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                   {currentDevices.map((device) => (
-                    <DeviceCard
-                      key={device.id}
-                      name={device.name}
-                      subtitle={device.subtitle}
-                      icon={device.icon}
-                      isActive={device.isActive}
-                      onToggle={() => toggleDevice(device.id)}
-                    />
+                  <DeviceCard
+                    key={device.id}
+                    name={device.name}
+                    subtitle={device.subtitle}
+                    icon={device.icon}
+                    isActive={device.isActive}
+                    onToggle={() => toggleDevice(device.id)}
+                    type={device.type}
+                    intensity={device.intensity}
+                    onIntensityChange={(intensity) => handleIntensityChange(device.id, intensity)}
+                  />
                   ))}
                 </div>
               </div>
@@ -288,6 +306,9 @@ const Index = () => {
                       icon={device.icon}
                       isActive={device.isActive}
                       onToggle={() => toggleDevice(device.id)}
+                      type={device.type}
+                      intensity={device.intensity}
+                      onIntensityChange={(intensity) => handleIntensityChange(device.id, intensity)}
                     />
                   ))}
                 </div>
