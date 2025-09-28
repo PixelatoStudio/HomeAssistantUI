@@ -206,7 +206,7 @@ const Index = () => {
                 Home Controls
               </h2>
 
-              {/* Temperature Controls */}
+              {/* Climate and Energy Row */}
               <TemperatureControl
                 location="Upstairs"
                 currentTemp={temperatures.upstairs.current}
@@ -221,7 +221,14 @@ const Index = () => {
                 onTempChange={(temp) => handleTempChange('downstairs', temp)}
               />
 
-              {/* Weather */}
+              <EnergyCard
+                currentUsage={2.4}
+                dailyUsage={24.8}
+                weeklyTrend="down"
+                cost={3.42}
+              />
+
+              {/* Weather and Sprinkler Row */}
               <WeatherCard
                 location="New York, NY"
                 temperature={28}
@@ -230,15 +237,6 @@ const Index = () => {
                 windSpeed={12}
               />
 
-              {/* Energy Monitoring */}
-              <EnergyCard
-                currentUsage={2.4}
-                dailyUsage={24.8}
-                weeklyTrend="down"
-                cost={3.42}
-              />
-
-              {/* Sprinkler System */}
               <SprinklerCard
                 zones={sprinklerZones}
                 onZoneToggle={toggleSprinklerZone}
