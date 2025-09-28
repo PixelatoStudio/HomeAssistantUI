@@ -61,7 +61,7 @@ interface SprinklerZone {
 
 const Index = () => {
   // State management
-  const [selectedRoom, setSelectedRoom] = useState<string>("living");
+  const [selectedRoom, setSelectedRoom] = useState<string>("home");
   const [devices, setDevices] = useState<Record<string, Device[]>>({
     living: [
       { id: "1", name: "Main Light", icon: Lightbulb, isActive: true, type: "light" },
@@ -110,14 +110,15 @@ const Index = () => {
     { id: 6, name: "Pool Area", isActive: true, duration: 25 }
   ]);
 
-  // Room definitions with images
+  // Room definitions with icons only
   const rooms: Room[] = [
-    { id: "living", name: "Living Room", icon: Sofa, deviceCount: devices.living?.length || 0, devices: devices.living || [], imageUrl: livingRoomImg },
-    { id: "bedroom", name: "Bedroom", icon: Bed, deviceCount: devices.bedroom?.length || 0, devices: devices.bedroom || [], imageUrl: bedroomImg },
-    { id: "kitchen", name: "Kitchen", icon: ChefHat, deviceCount: devices.kitchen?.length || 0, devices: devices.kitchen || [], imageUrl: kitchenImg },
-    { id: "bathroom", name: "Bathroom", icon: Bath, deviceCount: devices.bathroom?.length || 0, devices: devices.bathroom || [], imageUrl: bathroomImg },
-    { id: "office", name: "Office", icon: Home, deviceCount: devices.office?.length || 0, devices: devices.office || [], imageUrl: officeImg },
-    { id: "garage", name: "Garage", icon: Car, deviceCount: devices.garage?.length || 0, devices: devices.garage || [], imageUrl: garageImg }
+    { id: "home", name: "My Home", icon: Home, deviceCount: 0, devices: [] },
+    { id: "living", name: "Living Room", icon: Sofa, deviceCount: devices.living?.length || 0, devices: devices.living || [] },
+    { id: "bedroom", name: "Bedroom", icon: Bed, deviceCount: devices.bedroom?.length || 0, devices: devices.bedroom || [] },
+    { id: "kitchen", name: "Kitchen", icon: ChefHat, deviceCount: devices.kitchen?.length || 0, devices: devices.kitchen || [] },
+    { id: "bathroom", name: "Bathroom", icon: Bath, deviceCount: devices.bathroom?.length || 0, devices: devices.bathroom || [] },
+    { id: "office", name: "Office", icon: Thermometer, deviceCount: devices.office?.length || 0, devices: devices.office || [] },
+    { id: "garage", name: "Garage", icon: Car, deviceCount: devices.garage?.length || 0, devices: devices.garage || [] }
   ];
 
   // Event handlers
@@ -153,7 +154,7 @@ const Index = () => {
   };
 
   const selectedRoomData = rooms.find(room => room.id === selectedRoom);
-  const currentDevices = devices[selectedRoom] || [];
+  const currentDevices = selectedRoom === "home" ? [] : devices[selectedRoom] || [];
 
   return (
     <div className="min-h-screen bg-background p-6 animate-fade-in">
@@ -167,29 +168,40 @@ const Index = () => {
           <ThemeToggle />
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Left Sidebar - Rooms */}
-          <div className="lg:col-span-1">
-            <h2 className="text-lg font-semibold mb-4">Rooms</h2>
-            <div className="space-y-3">
-              {rooms.map((room) => (
-                <RoomCard
+        {/* Horizontal Tab Navigation */}
+        <div className="mb-8">
+          <div className="flex gap-2 p-1 bg-muted/50 rounded-xl backdrop-blur-lg">
+            {rooms.map((room) => {
+              const Icon = room.icon;
+              const isSelected = selectedRoom === room.id;
+              
+              return (
+                <button
                   key={room.id}
-                  name={room.name}
-                  deviceCount={room.deviceCount}
-                  icon={room.icon}
-                  isSelected={selectedRoom === room.id}
                   onClick={() => setSelectedRoom(room.id)}
-                  imageUrl={room.imageUrl}
-                />
-              ))}
-            </div>
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
+                    isSelected 
+                      ? 'bg-primary text-primary-foreground shadow-lg' 
+                      : 'hover:bg-white/50 dark:hover:bg-white/10'
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span className="font-medium text-sm">{room.name}</span>
+                  {room.deviceCount > 0 && !isSelected && (
+                    <span className="bg-muted-foreground/20 text-xs px-1.5 py-0.5 rounded-full">
+                      {room.deviceCount}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
+        </div>
 
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Global Controls - Moved to Top */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {selectedRoom === "home" ? (
+            <>
+              {/* Home Controls */}
               <h2 className="text-lg font-semibold mb-4 md:col-span-2 lg:col-span-3">
                 Home Controls
               </h2>
@@ -232,8 +244,11 @@ const Index = () => {
                 onZoneToggle={toggleSprinklerZone}
               />
 
-              {/* Room Devices - Moved Below Controls */}
-              <div className="md:col-span-2 lg:col-span-3 mt-8">
+            </>
+          ) : (
+            <>
+              {/* Room Devices */}
+              <div className="md:col-span-2 lg:col-span-3">
                 <h2 className="text-lg font-semibold mb-4">
                   {selectedRoomData?.name} Devices
                 </h2>
@@ -250,8 +265,8 @@ const Index = () => {
                   ))}
                 </div>
               </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </div>
     </div>
