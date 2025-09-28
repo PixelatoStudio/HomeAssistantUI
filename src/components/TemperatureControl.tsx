@@ -1,5 +1,6 @@
-import { Minus, Plus, Thermometer } from "lucide-react";
+import { Minus, Plus, Thermometer, Power, Flame, Snowflake } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
 
 interface TemperatureControlProps {
@@ -11,6 +12,8 @@ interface TemperatureControlProps {
 
 export function TemperatureControl({ location, currentTemp, targetTemp, onTempChange }: TemperatureControlProps) {
   const [target, setTarget] = useState(targetTemp);
+  const [isOn, setIsOn] = useState(true);
+  const [mode, setMode] = useState<'heat' | 'cool'>('heat');
 
   const adjustTemp = (delta: number) => {
     const newTemp = Math.max(10, Math.min(30, target + delta));
@@ -20,13 +23,26 @@ export function TemperatureControl({ location, currentTemp, targetTemp, onTempCh
 
   return (
     <div className="device-card col-span-2">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 rounded-lg bg-primary text-primary-foreground">
-          <Thermometer className="h-5 w-5" />
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-primary text-primary-foreground">
+            <Thermometer className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="font-semibold">{location} Climate</h3>
+            <p className="text-xs text-muted-foreground">Current: {currentTemp}°C</p>
+          </div>
         </div>
-        <div>
-          <h3 className="font-semibold">{location} Climate</h3>
-          <p className="text-xs text-muted-foreground">Current: {currentTemp}°C</p>
+        <div className="flex items-center gap-2">
+          <Switch checked={isOn} onCheckedChange={setIsOn} />
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setMode(mode === 'heat' ? 'cool' : 'heat')}
+            className={`p-1 rounded-md ${mode === 'heat' ? 'text-orange-500' : 'text-blue-500'}`}
+          >
+            {mode === 'heat' ? <Flame className="h-4 w-4" /> : <Snowflake className="h-4 w-4" />}
+          </Button>
         </div>
       </div>
       

@@ -189,26 +189,7 @@ const Index = () => {
           {/* Main Content */}
           <div className="lg:col-span-3">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Room Devices */}
-              <div className="md:col-span-2 lg:col-span-3">
-                <h2 className="text-lg font-semibold mb-4">
-                  {selectedRoomData?.name} Devices
-                </h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
-                  {currentDevices.map((device) => (
-                    <DeviceCard
-                      key={device.id}
-                      name={device.name}
-                      subtitle={device.subtitle}
-                      icon={device.icon}
-                      isActive={device.isActive}
-                      onToggle={() => toggleDevice(device.id)}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Global Controls */}
+              {/* Global Controls - Moved to Top */}
               <h2 className="text-lg font-semibold mb-4 md:col-span-2 lg:col-span-3">
                 Home Controls
               </h2>
@@ -250,6 +231,25 @@ const Index = () => {
                 zones={sprinklerZones}
                 onZoneToggle={toggleSprinklerZone}
               />
+
+              {/* Room Devices - Moved Below Controls */}
+              <div className="md:col-span-2 lg:col-span-3 mt-8">
+                <h2 className="text-lg font-semibold mb-4">
+                  {selectedRoomData?.name} Devices
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  {currentDevices.map((device) => (
+                    <DeviceCard
+                      key={device.id}
+                      name={device.name}
+                      subtitle={device.subtitle}
+                      icon={device.icon}
+                      isActive={device.isActive}
+                      onToggle={() => toggleDevice(device.id)}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
