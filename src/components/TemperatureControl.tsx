@@ -62,7 +62,7 @@ export function TemperatureControl({ location, currentTemp, targetTemp, onTempCh
               cx="50"
               cy="50"
               r="35"
-              stroke={isOn ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))"}
+              stroke={isOn ? "hsl(var(--accent))" : "hsl(var(--muted-foreground))"}
               strokeWidth="6"
               fill="transparent"
               strokeDasharray={`${(target / 30) * 219.9} 219.9`}
@@ -70,7 +70,7 @@ export function TemperatureControl({ location, currentTemp, targetTemp, onTempCh
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className={`text-lg font-bold ${isOn ? 'gradient-text' : 'text-muted-foreground'}`}>{target}</span>
+            <span className={`text-lg font-bold ${isOn ? 'text-accent' : 'text-muted-foreground'}`}>{target}</span>
             <span className="text-xs text-muted-foreground">°C</span>
           </div>
         </div>

@@ -22,10 +22,10 @@ All colors MUST be HSL.
     --primary-foreground: 0 0% 100%;
     --primary-glow: 255 84% 80%;
     
-    /* Accent colors for devices */
-    --accent: 88 67% 54%;
+    /* Accent colors for devices - Green olive for status/interactive elements */
+    --accent: 82 39% 45%;
     --accent-foreground: 0 0% 100%;
-    --accent-soft: 88 67% 95%;
+    --accent-soft: 82 39% 95%;
     
     /* Secondary colors */
     --secondary: 220 13% 94%;
@@ -91,10 +91,10 @@ All colors MUST be HSL.
     --primary-foreground: 220 18% 12%;
     --primary-glow: 255 84% 80%;
     
-    /* Dark accent colors */
-    --accent: 88 67% 60%;
+    /* Dark accent colors - Green olive for status/interactive elements */
+    --accent: 82 39% 50%;
     --accent-foreground: 220 18% 12%;
-    --accent-soft: 88 67% 15%;
+    --accent-soft: 82 39% 15%;
     
     /* Dark secondary */
     --secondary: 220 15% 18%;
