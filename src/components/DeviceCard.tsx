@@ -21,7 +21,7 @@ export function DeviceCard({ name, subtitle, icon: Icon, isActive, onToggle, siz
         {/* Icon and Title Row */}
         <div className="flex items-center gap-3">
           <div className={`p-2 rounded-lg ${isActive ? "status-active" : "bg-muted"} transition-all duration-300 flex-shrink-0`}>
-            <Icon className={`h-5 w-5 ${isActive ? "text-accent-foreground" : "text-muted-foreground"}`} />
+            <Icon className="h-5 w-5 text-muted-foreground" />
           </div>
           
           <div className="flex-1 min-w-0">

@@ -210,10 +210,10 @@ const Index = () => {
                 <button
                   key={room.id}
                   onClick={() => setSelectedRoom(room.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 whitespace-nowrap ${
-                    isSelected 
-                      ? 'bg-primary text-primary-foreground shadow-lg' 
-                      : 'hover:bg-white/50 dark:hover:bg-white/10'
+                   className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 whitespace-nowrap ${
+                     isSelected 
+                       ? 'bg-accent text-accent-foreground shadow-lg' 
+                       : 'hover:bg-white/50 dark:hover:bg-white/10'
                   }`}
                 >
                    <Icon className="h-4 w-4 text-muted-foreground" />
