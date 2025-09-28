@@ -192,7 +192,7 @@ const Index = () => {
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-montserrat font-semibold gradient-text">linx</h1>
+            <h1 className="text-3xl font-montserrat font-semibold text-muted-foreground">linx</h1>
             <p className="text-muted-foreground">Welcome back! Manage your connected devices</p>
           </div>
           <ThemeToggle />
@@ -216,8 +216,8 @@ const Index = () => {
                       : 'hover:bg-white/50 dark:hover:bg-white/10'
                   }`}
                 >
-                  <Icon className="h-4 w-4" />
-                  <span className="font-medium text-sm">{room.name}</span>
+                   <Icon className="h-4 w-4 text-muted-foreground" />
+                   <span className="font-medium text-sm">{room.name}</span>
                   {room.deviceCount > 0 && !isSelected && (
                     <span className="bg-muted-foreground/20 text-xs px-1.5 py-0.5 rounded-full">
                       {room.deviceCount}
