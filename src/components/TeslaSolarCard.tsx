@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Zap, Sun, Home, TrendingUp, ArrowLeft } from "lucide-react";
+import { Zap, Sun, Home, TrendingUp, ArrowLeft, Battery } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Button } from "@/components/ui/button";
 
@@ -7,7 +7,9 @@ interface TeslaSolarCardProps {
   powerGenerated: number;
   powerConsumed: number;
   powerExported: number;
-  status: "generating" | "storing" | "exporting";
+  status: "generating" | "storing" | "exporting" | "unavailable";
+  powerwallCharging: boolean;
+  powerwallCharge: number;
 }
 
 const weekData = {
@@ -61,17 +63,17 @@ const monthData = {
   ]
 };
 
-export function TeslaSolarCard({ 
-  powerGenerated, 
-  powerConsumed, 
-  powerExported, 
-  status 
+export function TeslaSolarCard({
+  powerGenerated,
+  powerConsumed,
+  powerExported,
+  status,
+  powerwallCharging,
+  powerwallCharge
 }: TeslaSolarCardProps) {
   const [viewMode, setViewMode] = useState<'overview' | 'chart'>('overview');
   const [selectedMetric, setSelectedMetric] = useState<'generated' | 'consumed' | 'exported'>('generated');
   const [timePeriod, setTimePeriod] = useState<'week' | 'month'>('week');
-  
-  const netPower = powerGenerated - powerConsumed;
 
   const handleMetricClick = (metric: 'generated' | 'consumed' | 'exported') => {
     setSelectedMetric(metric);
@@ -183,53 +185,51 @@ export function TeslaSolarCard({
             <span className="text-xs text-muted-foreground">Generated</span>
           </div>
           <div className="flex items-end justify-center gap-1">
-            <span className="text-xl font-bold text-accent">{powerGenerated}</span>
+            <span className="text-xl font-bold text-accent">{powerGenerated.toFixed(1)}</span>
             <span className="text-xs text-muted-foreground">kW</span>
           </div>
         </button>
-        
-        <button 
+
+        <button
           onClick={() => handleMetricClick('consumed')}
           className="text-center hover:bg-muted/50 rounded-lg p-2 transition-colors"
         >
           <div className="flex items-center justify-center gap-1 mb-1">
-            <Home className="h-4 w-4 text-muted-foreground" />
+            <Home className="h-4 w-4 text-accent" />
             <span className="text-xs text-muted-foreground">Consumed</span>
           </div>
           <div className="flex items-end justify-center gap-1">
-            <span className="text-xl font-bold">{powerConsumed}</span>
+            <span className="text-xl font-bold text-accent">{powerConsumed.toFixed(1)}</span>
             <span className="text-xs text-muted-foreground">kW</span>
           </div>
         </button>
-        
-        <button 
+
+        <button
           onClick={() => handleMetricClick('exported')}
           className="text-center hover:bg-muted/50 rounded-lg p-2 transition-colors"
         >
           <div className="flex items-center justify-center gap-1 mb-1">
-            <TrendingUp className="h-4 w-4 text-green-500" />
+            <TrendingUp className="h-4 w-4 text-accent" />
             <span className="text-xs text-muted-foreground">Exported</span>
           </div>
           <div className="flex items-end justify-center gap-1">
-            <span className="text-xl font-bold text-green-500">{powerExported}</span>
+            <span className="text-xl font-bold text-accent">{powerExported.toFixed(1)}</span>
             <span className="text-xs text-muted-foreground">kW</span>
           </div>
         </button>
       </div>
       
-      <div className="pt-3 mt-4 border-t border-border">
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">Net Power</span>
-          <div className="flex items-center gap-1">
-            <span className={`font-medium ${netPower > 0 ? 'text-green-500' : 'text-orange-500'}`}>
-              {netPower > 0 ? '+' : ''}{netPower} kW
-            </span>
-            <Zap className="h-3 w-3 text-muted-foreground" />
-          </div>
+      <div className="pt-3 mt-4 border-t border-border ml-2 pl-2">
+        <div className="flex items-center gap-2 text-sm mb-1">
+          <span className="text-muted-foreground">Powerwall Status:</span>
+          <span className={`font-medium ${powerwallCharging ? 'text-accent' : 'text-muted-foreground'}`}>
+            {powerwallCharging ? 'Charging' : 'Not Charging'}
+          </span>
         </div>
-        <p className="text-xs text-muted-foreground mt-1">
-          {netPower > 0 ? 'Exporting to grid' : 'Drawing from grid'}
-        </p>
+        <div className="flex items-center gap-2 text-sm">
+          <span className="text-muted-foreground">Current Charge:</span>
+          <span className="font-medium text-accent">{powerwallCharge}%</span>
+        </div>
       </div>
     </div>
   );

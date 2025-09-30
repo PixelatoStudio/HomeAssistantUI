@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuthStore } from "@/stores/authStore";
 import { useRoomStore } from "@/lib/rooms/roomStore";
-import { useSettingsStore } from "@/stores/settingsStore";
 import { DeviceTemplate } from "@/lib/rooms/types";
 import { DeviceLibraryDialog } from "@/lib/dashboard/DeviceLibraryDialog";
 import { EntityConfigDialog } from "@/lib/dashboard/EntityConfigDialog";
@@ -9,25 +8,26 @@ import { SetupWizardDialog } from "@/lib/setup/SetupWizardDialog";
 import { NewEntityScanDialog } from "@/lib/setup/NewEntityScanDialog";
 import { SettingsDialog } from "@/lib/dashboard/SettingsDialog";
 import { AdminDialog } from "@/lib/dashboard/AdminDialog";
-import { AddRoomDialog } from "@/lib/dashboard/AddRoomDialog";
 import { DeviceManager } from "@/lib/dashboard/DeviceManager";
 import { UniversalDeviceCard } from "@/lib/dashboard/UniversalDeviceCard";
 import { MultiEntityCard } from "@/lib/dashboard/MultiEntityCard";
 import { TemperatureControl } from "@/components/TemperatureControl";
 import { TeslaSolarCard } from "@/components/TeslaSolarCard";
 import { LoginScreen } from "@/components/LoginScreen";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
-import { LogOut, Plus, Settings, Home, Trash2, Activity, Shield } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { LogOut, Image, Plus, Settings, Home, Edit, Trash2, Sofa, Bed, Activity, Cog, RefreshCw, Shield } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 
-// Import room images
+// Import room images (reuse existing)
 import livingRoomImg from "@/assets/living-room.jpg";
 
-const Index = () => {
+const TestDashboard = () => {
   const { isAuthenticated, logout, credentials } = useAuthStore();
   const { rooms, selectedRoomId, selectRoom, addRoom, removeRoom, getSelectedRoom, addDeviceToRoom, removeDeviceFromRoom } = useRoomStore();
-  const { showBackgroundImage, customBackgroundUrl } = useSettingsStore();
 
   // Handle hydration state
   const [isHydrated, setIsHydrated] = useState(false);
@@ -37,6 +37,9 @@ const Index = () => {
     setIsHydrated(true);
   }, []);
 
+  const [showBackgroundImage, setShowBackgroundImage] = useState<boolean>(true);
+  const [customBackgroundUrl, setCustomBackgroundUrl] = useState<string>("");
+  const [newRoomName, setNewRoomName] = useState("");
   const [showAddRoomDialog, setShowAddRoomDialog] = useState(false);
   const [showDeviceLibrary, setShowDeviceLibrary] = useState(false);
   const [showEntityConfig, setShowEntityConfig] = useState(false);
@@ -65,19 +68,18 @@ const Index = () => {
 
   const selectedRoom = getSelectedRoom();
 
+
   // Ensure we have a selected room if rooms exist
   if (!selectedRoom && rooms.length > 0) {
     selectRoom(rooms[0].id);
   }
 
-  const getRoomIcon = (iconName: string, isSelected: boolean = false) => {
+  const getRoomIcon = (iconName: string) => {
     const IconComponent = (LucideIcons as any)[iconName];
-    // When selected, inherit color from parent. When not selected, use muted color
-    const iconClass = isSelected ? "h-4 w-4 text-current" : "h-4 w-4 text-muted-foreground";
     if (IconComponent) {
-      return <IconComponent className={iconClass} />;
+      return <IconComponent className="h-4 w-4 text-muted-foreground" />;
     }
-    return <Home className={iconClass} />;
+    return <Home className="h-4 w-4 text-muted-foreground" />;
   };
 
   const getDeviceIcon = (iconName: string) => {
@@ -88,9 +90,12 @@ const Index = () => {
     return <Activity className="h-4 w-4 text-muted-foreground" />;
   };
 
-  const handleAddRoom = (name: string, icon: string) => {
-    addRoom(name, icon);
-    setShowAddRoomDialog(false);
+  const handleAddRoom = () => {
+    if (newRoomName.trim()) {
+      addRoom(newRoomName.trim());
+      setNewRoomName("");
+      setShowAddRoomDialog(false);
+    }
   };
 
   const handleRemoveRoom = (roomId: string) => {
@@ -112,6 +117,14 @@ const Index = () => {
     deviceName: string;
     customIcon?: string;
   }) => {
+    console.log('🔧 handleDeviceConfirm called with:', {
+      selectedRoomId,
+      config,
+      template: config.template,
+      entity: config.entity,
+      entities: config.entities
+    });
+
     if (!selectedRoomId) {
       console.error('❌ No selectedRoomId available');
       return;
@@ -126,8 +139,11 @@ const Index = () => {
       customSettings: {},
     };
 
+    console.log('📱 Adding device to room:', { selectedRoomId, deviceData });
+
     try {
       addDeviceToRoom(selectedRoomId, deviceData);
+      console.log('✅ Device added successfully');
     } catch (error) {
       console.error('❌ Error adding device:', error);
     }
@@ -153,11 +169,22 @@ const Index = () => {
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-montserrat font-normal text-accent">
-              linx.casa
+            <h1 className="text-3xl font-montserrat font-normal text-foreground">
+              linx home automation
+              <span className="text-sm text-muted-foreground ml-3 font-normal">TEST DASHBOARD</span>
             </h1>
+            <p className="text-muted-foreground">Building the new card system - Welcome back, Reed!</p>
           </div>
           <div className="flex items-center gap-6">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => window.location.href = "/"}
+              className="flex items-center gap-2"
+            >
+              <Home className="h-4 w-4" />
+              Main Dashboard
+            </Button>
             <Button
               variant="ghost"
               size="sm"
@@ -188,6 +215,22 @@ const Index = () => {
           </div>
         </header>
 
+        {/* Progress Banner */}
+        <div className="mb-6 p-4 bg-muted/50 rounded-xl backdrop-blur-lg border border-accent/20">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-accent">✨ Test Dashboard - New Card System</h3>
+              <p className="text-sm text-muted-foreground">
+                Ready to test: Add rooms → Select device templates → Configure entities → Control devices
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Settings className="h-4 w-4 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">System Active</span>
+            </div>
+          </div>
+        </div>
+
         {/* Room Navigation */}
         <div className="mb-8">
           <div className="flex gap-2 p-1 bg-muted/50 rounded-xl backdrop-blur-lg overflow-x-auto scrollbar-hide">
@@ -205,7 +248,7 @@ const Index = () => {
                           : 'hover:bg-white/50 dark:hover:bg-white/10'
                       }`}
                     >
-                      {getRoomIcon(room.icon, isSelected)}
+                      {getRoomIcon(room.icon)}
                       <span className="font-medium text-sm">{room.name}</span>
                     </button>
 
@@ -224,13 +267,39 @@ const Index = () => {
               })}
 
               {/* Add Room Button */}
-              <button
-                onClick={() => setShowAddRoomDialog(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 whitespace-nowrap border-2 border-dashed border-muted-foreground/30 hover:border-accent/50 hover:bg-accent/10"
-              >
-                <Plus className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium text-sm text-muted-foreground">Add Room</span>
-              </button>
+              <Dialog open={showAddRoomDialog} onOpenChange={setShowAddRoomDialog}>
+                <DialogTrigger asChild>
+                  <button className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 whitespace-nowrap border-2 border-dashed border-muted-foreground/30 hover:border-accent/50 hover:bg-accent/10">
+                    <Plus className="h-4 w-4 text-muted-foreground" />
+                    <span className="font-medium text-sm text-muted-foreground">Add Room</span>
+                  </button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add New Room</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="room-name">Room Name</Label>
+                      <Input
+                        id="room-name"
+                        value={newRoomName}
+                        onChange={(e) => setNewRoomName(e.target.value)}
+                        placeholder="e.g., Kitchen, Office, Garage"
+                        onKeyDown={(e) => e.key === 'Enter' && handleAddRoom()}
+                      />
+                    </div>
+                    <div className="flex gap-2 justify-end">
+                      <Button variant="outline" onClick={() => setShowAddRoomDialog(false)}>
+                        Cancel
+                      </Button>
+                      <Button onClick={handleAddRoom} disabled={!newRoomName.trim()}>
+                        Add Room
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>
@@ -246,13 +315,29 @@ const Index = () => {
                     No rooms available. Add a room to get started!
                   </p>
                 </>
+              ) : selectedRoom.devices.length === 0 ? (
+                <>
+                  <p className="text-muted-foreground mb-6">
+                    No devices configured yet. Add your first device to get started!
+                  </p>
+
+                  {/* Add Device Button */}
+                  <button
+                    onClick={() => setShowDeviceLibrary(true)}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add Device
+                  </button>
+                </>
               ) : (
                 <>
                   {/* Device Cards - Live Controls */}
-                  <DeviceManager roomId={selectedRoom.id}>
-                    {({ devices, entityStates, isOnline, toggleDevice, setDeviceBrightness, setDeviceColor, setHvacMode, setTemperature, removeDevice }) => (
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {devices.map((device) => {
+                  {selectedRoom.devices.length > 0 ? (
+                    <DeviceManager roomId={selectedRoom.id}>
+                      {({ devices, entityStates, isOnline, toggleDevice, setDeviceBrightness, setDeviceColor, setHvacMode, setTemperature, removeDevice }) => (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
+                          {devices.map((device) => {
                             // Render multi-entity card for multi_entity type
                             if (device.type === 'multi_entity') {
                               return (
@@ -326,25 +411,30 @@ const Index = () => {
                               />
                             );
                           })}
+                        </div>
+                      )}
+                    </DeviceManager>
+                  ) : null}
 
-                        {/* Add Device Card */}
-                        <button
-                          onClick={() => setShowDeviceLibrary(true)}
-                          className="flex flex-col items-center justify-center min-h-[180px] rounded-2xl border-2 border-dashed border-muted-foreground/30 hover:border-accent/50 hover:bg-accent/5 transition-all duration-300 group"
-                        >
-                          <Plus className="h-8 w-8 text-muted-foreground group-hover:text-accent transition-colors mb-2" />
-                          <span className="text-muted-foreground group-hover:text-accent transition-colors font-medium">
-                            Add Device
-                          </span>
-                        </button>
-                      </div>
-                    )}
-                  </DeviceManager>
+                  <button
+                    onClick={() => setShowDeviceLibrary(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-accent/20 text-accent rounded-lg hover:bg-accent/30 transition-colors"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add Another Device
+                  </button>
                 </>
               )}
             </div>
           </div>
         </div>
+
+        {/* Footer - Development Status */}
+        <footer className="mt-8 p-4 bg-muted/30 rounded-lg backdrop-blur-sm">
+          <div className="text-center text-sm text-muted-foreground">
+            <p>Test Dashboard Active • Room Management ✅ • Device Templates ✅ • Entity Configuration ✅ • Live Device Controls ✅</p>
+          </div>
+        </footer>
 
         {/* Dialogs */}
         <DeviceLibraryDialog
@@ -373,6 +463,10 @@ const Index = () => {
         <SettingsDialog
           open={showSettings}
           onOpenChange={setShowSettings}
+          showBackgroundImage={showBackgroundImage}
+          onBackgroundImageChange={setShowBackgroundImage}
+          customBackgroundUrl={customBackgroundUrl}
+          onCustomBackgroundChange={setCustomBackgroundUrl}
         />
 
         <AdminDialog
@@ -381,15 +475,9 @@ const Index = () => {
           onSetupWizard={() => setShowSetupWizard(true)}
           onScanNew={() => setShowNewEntityScan(true)}
         />
-
-        <AddRoomDialog
-          open={showAddRoomDialog}
-          onOpenChange={setShowAddRoomDialog}
-          onAddRoom={handleAddRoom}
-        />
       </div>
     </div>
   );
 };
 
-export default Index;
+export default TestDashboard;

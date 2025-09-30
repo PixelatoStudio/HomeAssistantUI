@@ -59,6 +59,10 @@ All colors MUST be HSL.
     /* Border radius */
     --radius: 1rem;
 
+    /* Popover - solid background for dropdowns */
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 13% 18%;
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -124,6 +128,11 @@ All colors MUST be HSL.
     --shadow-glass: 0 8px 32px rgba(0,0,0,0.4);
     --shadow-device: 0 4px 20px rgba(139, 195, 74, 0.2);
     --shadow-hover: 0 12px 40px rgba(0,0,0,0.6);
+
+    /* Dark popover - solid background for dropdowns */
+    --popover: 220 15% 15%;
+    --popover-foreground: 220 8% 92%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
