@@ -15,19 +15,55 @@ import { UniversalDeviceCard } from "@/lib/dashboard/UniversalDeviceCard";
 import { MultiEntityCard } from "@/lib/dashboard/MultiEntityCard";
 import { TemperatureControl } from "@/components/TemperatureControl";
 import { TeslaSolarCard } from "@/components/TeslaSolarCard";
+import { SortableDeviceCard } from "@/lib/dashboard/SortableDeviceCard";
 import { LoginScreen } from "@/components/LoginScreen";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { LogOut, Plus, Settings, Home, Trash2, Activity, Shield } from "lucide-react";
 import * as LucideIcons from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+  DragStartEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy,
+} from '@dnd-kit/sortable';
 
 // Import room images
 import livingRoomImg from "@/assets/living-room.jpg";
 
 const Index = () => {
   const { isAuthenticated, logout, credentials } = useAuthStore();
-  const { rooms, selectedRoomId, selectRoom, addRoom, removeRoom, getSelectedRoom, addDeviceToRoom, removeDeviceFromRoom } = useRoomStore();
+  const { rooms, selectedRoomId, selectRoom, addRoom, removeRoom, getSelectedRoom, addDeviceToRoom, removeDeviceFromRoom, reorderDevicesInRoom } = useRoomStore();
   const { showBackgroundImage, customBackgroundUrl } = useSettingsStore();
+
+  // Configure drag sensors for tablet/touch optimization
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // 8px of movement before drag starts
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250, // 250ms long press for touch
+        tolerance: 5, // 5px of movement tolerance
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   // Handle hydration state
   const [isHydrated, setIsHydrated] = useState(false);
@@ -45,6 +81,7 @@ const Index = () => {
   const [showNewEntityScan, setShowNewEntityScan] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   // Show loading during hydration to prevent flash
   if (!isHydrated) {
@@ -134,6 +171,23 @@ const Index = () => {
 
     setShowEntityConfig(false);
     setSelectedTemplate(null);
+  };
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string);
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    setActiveId(null);
+    if (!over || !selectedRoom) return;
+    if (active.id !== over.id) {
+      const oldIndex = selectedRoom.devices.findIndex(d => d.id === active.id);
+      const newIndex = selectedRoom.devices.findIndex(d => d.id === over.id);
+      const newOrder = arrayMove(selectedRoom.devices, oldIndex, newIndex);
+      const newDeviceIds = newOrder.map(d => d.id);
+      reorderDevicesInRoom(selectedRoom.id, newDeviceIds);
+    }
   };
 
   const backgroundImageUrl = customBackgroundUrl || livingRoomImg;
@@ -248,25 +302,36 @@ const Index = () => {
                 </>
               ) : (
                 <>
-                  {/* Device Cards - Live Controls */}
+                  {/* Device Cards - Live Controls with Drag & Drop */}
                   <DeviceManager roomId={selectedRoom.id}>
                     {({ devices, entityStates, isOnline, toggleDevice, setDeviceBrightness, setDeviceColor, setHvacMode, setTemperature, removeDevice }) => (
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragStart={handleDragStart}
+                        onDragEnd={handleDragEnd}
+                      >
+                        <SortableContext
+                          items={devices.map(d => d.id)}
+                          strategy={rectSortingStrategy}
+                        >
+                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {devices.map((device) => {
                             // Render multi-entity card for multi_entity type
                             if (device.type === 'multi_entity') {
                               return (
-                                <MultiEntityCard
-                                  key={device.id}
-                                  device={device}
-                                  entityStates={entityStates}
-                                  isOnline={isOnline}
-                                  onToggle={toggleDevice}
-                                  onIntensityChange={setDeviceBrightness}
-                                  onHvacModeChange={setHvacMode}
-                                  onTemperatureChange={setTemperature}
-                                  onRemove={removeDevice}
-                                />
+                                <SortableDeviceCard key={device.id} id={device.id}>
+                                  <MultiEntityCard
+                                    device={device}
+                                    entityStates={entityStates}
+                                    isOnline={isOnline}
+                                    onToggle={toggleDevice}
+                                    onIntensityChange={setDeviceBrightness}
+                                    onHvacModeChange={setHvacMode}
+                                    onTemperatureChange={setTemperature}
+                                    onRemove={removeDevice}
+                                  />
+                                </SortableDeviceCard>
                               );
                             }
 
@@ -276,13 +341,14 @@ const Index = () => {
                               if (!entity) return null;
 
                               return (
-                                <TemperatureControl
-                                  key={device.id}
-                                  entity={entity}
-                                  onEntityUpdate={() => {
-                                    // Refresh entity state after changes
-                                  }}
-                                />
+                                <SortableDeviceCard key={device.id} id={device.id}>
+                                  <TemperatureControl
+                                    entity={entity}
+                                    onEntityUpdate={() => {
+                                      // Refresh entity state after changes
+                                    }}
+                                  />
+                                </SortableDeviceCard>
                               );
                             }
 
@@ -300,30 +366,32 @@ const Index = () => {
                               const status = powerGenerated > 0 ? (powerGenerated > powerConsumed ? 'exporting' : 'generating') : 'unavailable';
 
                               return (
-                                <TeslaSolarCard
-                                  key={device.id}
-                                  powerGenerated={powerGenerated}
-                                  powerConsumed={powerConsumed}
-                                  powerExported={powerExported}
-                                  status={status}
-                                  powerwallCharging={powerwallCharging}
-                                  powerwallCharge={powerwallCharge}
-                                />
+                                <SortableDeviceCard key={device.id} id={device.id} className="col-span-2">
+                                  <TeslaSolarCard
+                                    powerGenerated={powerGenerated}
+                                    powerConsumed={powerConsumed}
+                                    powerExported={powerExported}
+                                    status={status}
+                                    powerwallCharging={powerwallCharging}
+                                    powerwallCharge={powerwallCharge}
+                                  />
+                                </SortableDeviceCard>
                               );
                             }
 
                             // Render normal device card
                             return (
-                              <UniversalDeviceCard
-                                key={device.id}
-                                device={device}
-                                entityState={entityStates[device.entityId]}
-                                isOnline={isOnline}
-                                onToggle={toggleDevice}
-                                onIntensityChange={setDeviceBrightness}
-                                onColorChange={setDeviceColor}
-                                onRemove={removeDevice}
-                              />
+                              <SortableDeviceCard key={device.id} id={device.id}>
+                                <UniversalDeviceCard
+                                  device={device}
+                                  entityState={entityStates[device.entityId]}
+                                  isOnline={isOnline}
+                                  onToggle={toggleDevice}
+                                  onIntensityChange={setDeviceBrightness}
+                                  onColorChange={setDeviceColor}
+                                  onRemove={removeDevice}
+                                />
+                              </SortableDeviceCard>
                             );
                           })}
 
@@ -337,7 +405,9 @@ const Index = () => {
                             Add Device
                           </span>
                         </button>
-                      </div>
+                          </div>
+                        </SortableContext>
+                      </DndContext>
                     )}
                   </DeviceManager>
                 </>

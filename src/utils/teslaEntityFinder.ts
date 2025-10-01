@@ -172,21 +172,15 @@ export async function findTeslaSolarEntities(credentials: { url: string; token: 
         powerGenerated = Math.max(powerGenerated, state);
       }
 
-      // Consumed power patterns - prioritize specific sensor first
-      if (entityId === 'sensor.powerwall_my_home_total_home_consumed_daily' ||
-          entityId === 'sensor.my_home_site_import') {
-        console.log(`✅ Found CONSUMED power: ${entity.entity_id} = ${state}W/kW`);
+      // Consumed power - use daily utility meter sensor
+      if (entityId === 'sensor.powerwall_my_home_total_consumed_daily') {
+        console.log(`✅ Found TOTAL CONSUMED (daily): ${entity.entity_id} = ${state}kWh`);
         powerConsumed = state;
-      } else if ((entityId.includes('total_home_consumed') ||
-                  entityId.includes('home_consumed') ||
-                  friendlyName.includes('total home consumed') ||
-                  friendlyName.includes('home consumed')) && powerConsumed === 0) {
-        console.log(`✅ Found CONSUMED power (pattern match): ${entity.entity_id} = ${state}W/kW`);
-        powerConsumed = state;
-      } else if (isLoadPowerEntity(entityId, friendlyName) && powerConsumed === 0) {
-        // Only use fallback patterns if we haven't found the specific sensor
-        console.log(`✅ Found CONSUMED power (fallback): ${entity.entity_id} = ${state}W/kW`);
-        powerConsumed = Math.max(powerConsumed, state);
+      }
+
+      // Debug: Log all entities with "consumed" in the name
+      if (entityId.includes('consumed') || friendlyName.includes('consumed')) {
+        console.log(`🔍 CONSUMED SENSOR: ${entity.entity_id} | Name: "${entity.attributes.friendly_name}" | State: "${entity.state}" | Unit: ${entity.attributes.unit_of_measurement || 'none'}`);
       }
 
       // Exported power patterns (to grid)

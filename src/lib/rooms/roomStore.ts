@@ -16,6 +16,7 @@ interface RoomState {
   addDeviceToRoom: (roomId: string, device: Omit<DeviceConfig, 'id' | 'createdAt' | 'updatedAt'>) => DeviceConfig;
   removeDeviceFromRoom: (roomId: string, deviceId: string) => void;
   updateDeviceInRoom: (roomId: string, deviceId: string, updates: Partial<Omit<DeviceConfig, 'id' | 'createdAt'>>) => void;
+  reorderDevicesInRoom: (roomId: string, deviceIds: string[]) => void;
 
   // Admin actions
   clearAllDevices: () => void;
@@ -148,6 +149,20 @@ export const useRoomStore = create<RoomState>()(
                       ? { ...device, ...updates, updatedAt: new Date() }
                       : device
                   ),
+                  updatedAt: new Date(),
+                }
+              : room
+          ),
+        }));
+      },
+
+      reorderDevicesInRoom: (roomId: string, deviceIds: string[]) => {
+        set(state => ({
+          rooms: state.rooms.map(room =>
+            room.id === roomId
+              ? {
+                  ...room,
+                  devices: deviceIds.map(id => room.devices.find(d => d.id === id)!).filter(Boolean),
                   updatedAt: new Date(),
                 }
               : room

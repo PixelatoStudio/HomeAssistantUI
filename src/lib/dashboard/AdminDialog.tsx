@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Cog, RefreshCw, Shield, Trash2, AlertTriangle, RotateCcw } from "lucide-react";
+import { Cog, RefreshCw, Shield, Trash2, AlertTriangle, RotateCcw, Sun } from "lucide-react";
 import { useRoomStore } from "@/lib/rooms/roomStore";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { SolarEntityConfigDialog } from "./SolarEntityConfigDialog";
 
 interface AdminDialogProps {
   open: boolean;
@@ -21,6 +22,7 @@ export function AdminDialog({
   const { clearAllDevices, resetDashboard } = useRoomStore();
   const { resetSettings } = useSettingsStore();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showSolarConfig, setShowSolarConfig] = useState(false);
 
   const handleSetupWizard = () => {
     onOpenChange(false);
@@ -57,6 +59,7 @@ export function AdminDialog({
   };
 
   return (
+    <>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
@@ -77,7 +80,7 @@ export function AdminDialog({
           <Button
             variant="outline"
             onClick={handleSetupWizard}
-            className="w-full flex items-center justify-start gap-3 h-auto py-4"
+            className="w-full flex items-center justify-start gap-3 h-auto py-4 border-accent/50 hover:bg-accent/10 hover:text-foreground"
           >
             <div className="p-2 rounded-lg bg-accent/10">
               <Cog className="h-5 w-5 text-accent" />
@@ -94,7 +97,7 @@ export function AdminDialog({
           <Button
             variant="outline"
             onClick={handleScanNew}
-            className="w-full flex items-center justify-start gap-3 h-auto py-4"
+            className="w-full flex items-center justify-start gap-3 h-auto py-4 border-accent/50 hover:bg-accent/10 hover:text-foreground"
           >
             <div className="p-2 rounded-lg bg-accent/10">
               <RefreshCw className="h-5 w-5 text-accent" />
@@ -103,6 +106,26 @@ export function AdminDialog({
               <div className="font-semibold">Scan New Entities</div>
               <div className="text-xs text-muted-foreground">
                 Discover and configure new Home Assistant entities
+              </div>
+            </div>
+          </Button>
+
+          {/* Configure Solar Entities */}
+          <Button
+            variant="outline"
+            onClick={() => {
+              onOpenChange(false);
+              setShowSolarConfig(true);
+            }}
+            className="w-full flex items-center justify-start gap-3 h-auto py-4 border-accent/50 hover:bg-accent/10 hover:text-foreground"
+          >
+            <div className="p-2 rounded-lg bg-accent/10">
+              <Sun className="h-5 w-5 text-accent" />
+            </div>
+            <div className="flex-1 text-left">
+              <div className="font-semibold">Configure Solar Entities</div>
+              <div className="text-xs text-muted-foreground">
+                Remap Tesla Solar System entity connections
               </div>
             </div>
           </Button>
@@ -119,13 +142,13 @@ export function AdminDialog({
           <Button
             variant={showConfirm ? "destructive" : "outline"}
             onClick={handleClearDevices}
-            className="w-full flex items-center justify-start gap-3 h-auto py-4"
+            className={`w-full flex items-center justify-start gap-3 h-auto py-4 ${!showConfirm ? 'border-destructive/50 hover:bg-destructive/10' : ''}`}
           >
             <div className={`p-2 rounded-lg ${showConfirm ? 'bg-destructive-foreground/10' : 'bg-destructive/10'}`}>
               <Trash2 className={`h-5 w-5 ${showConfirm ? 'text-destructive-foreground' : 'text-destructive'}`} />
             </div>
             <div className="flex-1 text-left">
-              <div className="font-semibold">
+              <div className={`font-semibold ${!showConfirm ? 'text-destructive' : ''}`}>
                 {showConfirm ? 'Click Again to Confirm' : 'Clear All Devices'}
               </div>
               <div className={`text-xs ${showConfirm ? 'text-destructive-foreground/80' : 'text-muted-foreground'}`}>
@@ -180,5 +203,12 @@ export function AdminDialog({
         </div>
       </DialogContent>
     </Dialog>
+
+    {/* Solar Entity Config Dialog - separate from Admin Dialog */}
+    <SolarEntityConfigDialog
+      open={showSolarConfig}
+      onOpenChange={setShowSolarConfig}
+    />
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Zap, Sun, Home, TrendingUp, ArrowLeft, Battery } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Button } from "@/components/ui/button";
 
 interface TeslaSolarCardProps {
@@ -85,12 +85,7 @@ export function TeslaSolarCard({
   };
 
   const getMetricColor = () => {
-    switch (selectedMetric) {
-      case 'generated': return 'hsl(var(--accent))';
-      case 'consumed': return 'hsl(var(--muted-foreground))';
-      case 'exported': return '#10b981';
-      default: return 'hsl(var(--accent))';
-    }
+    return 'hsl(var(--accent))';
   };
 
   if (viewMode === 'chart') {
@@ -113,16 +108,18 @@ export function TeslaSolarCard({
           </div>
           <div className="flex gap-2">
             <Button
-              variant={timePeriod === 'week' ? 'default' : 'outline'}
+              variant="outline"
               size="sm"
               onClick={() => setTimePeriod('week')}
+              className={timePeriod === 'week' ? 'bg-accent text-accent-foreground hover:bg-accent/90' : ''}
             >
               Week
             </Button>
             <Button
-              variant={timePeriod === 'month' ? 'default' : 'outline'}
+              variant="outline"
               size="sm"
               onClick={() => setTimePeriod('month')}
+              className={timePeriod === 'month' ? 'bg-accent text-accent-foreground hover:bg-accent/90' : ''}
             >
               Month
             </Button>
@@ -131,18 +128,18 @@ export function TeslaSolarCard({
         
         <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={getChartData()}>
+            <LineChart data={getChartData()}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis 
-                dataKey="name" 
+              <XAxis
+                dataKey="name"
                 stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
               />
-              <YAxis 
+              <YAxis
                 stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
               />
-              <Tooltip 
+              <Tooltip
                 contentStyle={{
                   backgroundColor: 'hsl(var(--background))',
                   border: '1px solid hsl(var(--border))',
@@ -151,12 +148,15 @@ export function TeslaSolarCard({
                 }}
                 formatter={(value: number) => [`${value} kWh`, 'Energy']}
               />
-              <Bar 
-                dataKey="value" 
-                fill={getMetricColor()} 
-                radius={[4, 4, 0, 0]}
+              <Line
+                type="monotone"
+                dataKey="value"
+                stroke={getMetricColor()}
+                strokeWidth={2}
+                dot={{ fill: getMetricColor(), r: 4 }}
+                activeDot={{ r: 6 }}
               />
-            </BarChart>
+            </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
@@ -169,9 +169,9 @@ export function TeslaSolarCard({
         <div className="p-2 rounded-lg bg-muted">
           <Sun className="h-5 w-5 text-muted-foreground" />
         </div>
-        <div>
-          <h3 className="font-semibold">Tesla Solar</h3>
-          <p className="text-xs text-muted-foreground capitalize">{status}</p>
+        <div className="flex-1 min-w-0">
+          <h3 className="font-semibold text-left">Tesla Solar Panels</h3>
+          <p className={`text-xs text-left capitalize mt-1 ${status === 'unavailable' ? 'text-muted-foreground' : 'text-accent'}`}>{status}</p>
         </div>
       </div>
       
@@ -186,7 +186,7 @@ export function TeslaSolarCard({
           </div>
           <div className="flex items-end justify-center gap-1">
             <span className="text-xl font-bold text-accent">{powerGenerated.toFixed(1)}</span>
-            <span className="text-xs text-muted-foreground">kW</span>
+            <span className="text-xs text-muted-foreground">kWh</span>
           </div>
         </button>
 
@@ -200,7 +200,7 @@ export function TeslaSolarCard({
           </div>
           <div className="flex items-end justify-center gap-1">
             <span className="text-xl font-bold text-accent">{powerConsumed.toFixed(1)}</span>
-            <span className="text-xs text-muted-foreground">kW</span>
+            <span className="text-xs text-muted-foreground">kWh</span>
           </div>
         </button>
 
@@ -214,7 +214,7 @@ export function TeslaSolarCard({
           </div>
           <div className="flex items-end justify-center gap-1">
             <span className="text-xl font-bold text-accent">{powerExported.toFixed(1)}</span>
-            <span className="text-xs text-muted-foreground">kW</span>
+            <span className="text-xs text-muted-foreground">kWh</span>
           </div>
         </button>
       </div>

@@ -86,7 +86,9 @@ export function SettingsDialog({
               <Button
                 variant={theme === 'light' ? 'default' : 'outline'}
                 onClick={() => handleThemeChange('light')}
-                className="flex-1 flex items-center gap-2"
+                className={`flex-1 flex items-center gap-2 ${
+                  theme === 'light' ? 'bg-accent hover:bg-accent/90 text-accent-foreground' : ''
+                }`}
               >
                 <Sun className="h-4 w-4" />
                 Light
@@ -94,7 +96,9 @@ export function SettingsDialog({
               <Button
                 variant={theme === 'dark' ? 'default' : 'outline'}
                 onClick={() => handleThemeChange('dark')}
-                className="flex-1 flex items-center gap-2"
+                className={`flex-1 flex items-center gap-2 ${
+                  theme === 'dark' ? 'bg-accent hover:bg-accent/90 text-accent-foreground' : ''
+                }`}
               >
                 <Moon className="h-4 w-4" />
                 Dark
@@ -167,7 +171,11 @@ export function SettingsDialog({
                 onChange={(e) => setImageUrl(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleImageUrlSubmit()}
               />
-              <Button onClick={handleImageUrlSubmit} size="sm">
+              <Button
+                onClick={handleImageUrlSubmit}
+                size="sm"
+                className="bg-accent hover:bg-accent/90 text-accent-foreground"
+              >
                 Apply
               </Button>
             </div>
