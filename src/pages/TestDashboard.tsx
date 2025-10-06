@@ -20,7 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { LogOut, Image, Plus, Settings, Home, Edit, Trash2, Sofa, Bed, Activity, Cog, RefreshCw, Shield } from "lucide-react";
+import { LogOut, Image, Plus, Settings, Home, Edit, Trash2, Sofa, Bed, Activity, Cog, RefreshCw, Shield, Video } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import {
   DndContext,
@@ -45,6 +45,10 @@ import { CSS } from '@dnd-kit/utilities';
 
 // Import room images (reuse existing)
 import livingRoomImg from "@/assets/living-room.jpg";
+
+// TEST DASHBOARD ONLY - Camera Stream Experiment
+import { CameraStreamDialog } from "@/lib/camera/CameraStreamDialog";
+import { LiveCameraCard } from "@/lib/camera/LiveCameraCard";
 
 const TestDashboard = () => {
   const { isAuthenticated, logout, credentials } = useAuthStore();
@@ -88,6 +92,9 @@ const TestDashboard = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  // TEST DASHBOARD ONLY - Camera Stream State
+  const [showCameraStream, setShowCameraStream] = useState(false);
 
   // Show loading during hydration to prevent flash
   if (!isHydrated) {
@@ -238,6 +245,17 @@ const TestDashboard = () => {
             <p className="text-muted-foreground">Building the new card system - Welcome back, Reed!</p>
           </div>
           <div className="flex items-center gap-6">
+            {/* TEST DASHBOARD ONLY - Camera Test Button */}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowCameraStream(true)}
+              className="flex items-center gap-2 border-accent/50"
+            >
+              <Video className="h-4 w-4" />
+              Test Camera
+            </Button>
+
             <Button
               variant="ghost"
               size="sm"
@@ -556,6 +574,19 @@ const TestDashboard = () => {
           onSetupWizard={() => setShowSetupWizard(true)}
           onScanNew={() => setShowNewEntityScan(true)}
         />
+
+        {/* TEST DASHBOARD ONLY - Camera Stream Dialog */}
+        {credentials && (
+          <CameraStreamDialog
+            open={showCameraStream}
+            onOpenChange={setShowCameraStream}
+            entityId="camera.front_door_sub"
+            snapshotEntity="camera.front_door_snapshots_sub"
+            entityName="Front Door Camera"
+            host={credentials.url.replace(/^https?:\/\//, '')}
+            token={credentials.token}
+          />
+        )}
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Lightbulb, Zap, Activity, Thermometer, Tv, Fan, Speaker, Shield, Lock, Sparkles } from "lucide-react";
+import { Search, Lightbulb, Zap, Activity, Thermometer, Tv, Fan, Speaker, Shield, Lock, Sparkles, Video, Sun } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 
 import { DeviceTemplate, DeviceType } from "../rooms/types";
@@ -48,6 +48,8 @@ export function DeviceLibraryDialog({ open, onOpenChange, onSelectTemplate }: De
       case 'climate': return <Thermometer className="h-4 w-4 text-muted-foreground" />;
       case 'scenes': return <Sparkles className="h-4 w-4 text-muted-foreground" />;
       case 'entertainment': return <Tv className="h-4 w-4 text-muted-foreground" />;
+      case 'security': return <Video className="h-4 w-4 text-muted-foreground" />;
+      case 'energy': return <Sun className="h-4 w-4 text-muted-foreground" />;
       default: return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -144,7 +146,7 @@ export function DeviceLibraryDialog({ open, onOpenChange, onSelectTemplate }: De
                         </p>
                         <div className="flex gap-1 mt-2 flex-wrap">
                           <Badge variant="secondary" className="text-xs">
-                            {template.entityDomain}
+                            {template.requiredEntityDomain}
                           </Badge>
                           {template.supportedControls.slice(0, 2).map(control => (
                             <Badge key={control} variant="outline" className="text-xs">

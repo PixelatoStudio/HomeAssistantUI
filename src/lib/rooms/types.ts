@@ -42,20 +42,23 @@ export type DeviceType =
   | 'speaker'
   | 'media_player'
   | 'multi_entity' // New type for multi-entity cards
-  | 'solar_system'; // Tesla Solar System
+  | 'solar_system' // Tesla Solar System
+  | 'scene' // Home Assistant scene
+  | 'camera'; // Camera/video feed
 
 // Device template definition
 export interface DeviceTemplate {
   type: DeviceType;
   name: string;
   icon: string;
-  category: 'lighting' | 'switches' | 'sensors' | 'climate' | 'entertainment' | 'energy';
+  category: 'lighting' | 'switches' | 'sensors' | 'climate' | 'entertainment' | 'energy' | 'scenes' | 'security';
   description: string;
   requiredEntityDomain: string; // e.g., 'light', 'switch', 'sensor'
   requiredEntityFeatures?: string[]; // e.g., ['brightness', 'color']
   defaultIcon: string;
   supportedControls: DeviceControl[];
   isMultiEntity?: boolean; // Indicates this device uses multiple entities
+  entityFilter?: (entityId: string) => boolean; // Custom filter function for entity selection
 }
 
 // UI controls that a device supports
@@ -68,7 +71,9 @@ export type DeviceControl =
   | 'source'
   | 'speed'
   | 'target_temperature'
-  | 'readonly_display';
+  | 'readonly_display'
+  | 'button'
+  | 'camera_stream';
 
 // Room dashboard configuration
 export interface RoomDashboard {

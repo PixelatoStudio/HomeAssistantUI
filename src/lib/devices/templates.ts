@@ -214,6 +214,19 @@ export const deviceTemplates: DeviceTemplate[] = [
     defaultIcon: 'Volume2',
     supportedControls: ['toggle', 'volume', 'source'],
   },
+
+  // SECURITY CATEGORY
+  {
+    type: 'camera',
+    name: 'Camera',
+    icon: 'Video',
+    category: 'security',
+    description: 'Live camera feed display',
+    requiredEntityDomain: 'camera',
+    defaultIcon: 'Video',
+    supportedControls: ['camera_stream'],
+    entityFilter: (entityId: string) => entityId.includes('camera'), // Filter entities containing 'camera'
+  },
 ];
 
 // Helper functions

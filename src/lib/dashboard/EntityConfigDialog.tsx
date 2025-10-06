@@ -68,7 +68,14 @@ export function EntityConfigDialog({ open, onOpenChange, template, onConfirm }: 
         domains.map(d => entityService.getEntitiesByDomain(d))
       );
 
-      const compatibleEntities = allEntities.flat();
+      let compatibleEntities = allEntities.flat();
+
+      // Apply custom entity filter if specified
+      if (template.entityFilter) {
+        compatibleEntities = compatibleEntities.filter(entity =>
+          template.entityFilter!(entity.entity_id)
+        );
+      }
 
       // Filter by required features if specified
       const filteredEntities = template.requiredEntityFeatures

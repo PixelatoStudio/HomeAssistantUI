@@ -11,6 +11,9 @@ import { useLongPress } from "@/hooks/useLongPress";
 import { DeviceConfig, DeviceTemplate } from "../rooms/types";
 import { getTemplateByType } from "../devices/templates";
 import { entityService } from "../entities/entityService";
+import { LiveCameraCard } from "../camera/LiveCameraCard";
+import { CameraStreamDialog } from "../camera/CameraStreamDialog";
+import { useAuthStore } from "@/stores/authStore";
 
 // Helper function to convert Home Assistant color to hex
 const convertColorToHex = (color?: number[] | string): string => {
@@ -74,7 +77,6 @@ export function UniversalDeviceCard({
   entityState,
   isOnline = true
 }: UniversalDeviceCardProps) {
-
   // Debug: Log device card rendering
   console.log('🃏 UniversalDeviceCard rendering:', {
     deviceId: device.id,
@@ -93,6 +95,9 @@ export function UniversalDeviceCard({
   const [localIntensity, setLocalIntensity] = useState(currentIntensity);
   const [showColorDialog, setShowColorDialog] = useState(false);
   const [tempColor, setTempColor] = useState(convertColorToHex(entityState?.attributes?.hs_color || entityState?.attributes?.rgb_color));
+  const [showCameraModal, setShowCameraModal] = useState(false);
+
+  const { credentials } = useAuthStore();
 
   // Update local intensity when entity state changes
   useEffect(() => {
@@ -300,6 +305,28 @@ export function UniversalDeviceCard({
 
     return `${state} ${unit}`.trim();
   };
+
+  // Camera device - render LiveCameraCard
+  if (device.type === 'camera' && credentials) {
+    return (
+      <>
+        <LiveCameraCard
+          entityId={device.entityId}
+          name={device.name}
+          host={credentials.url.replace(/^https?:\/\//, '')}
+          token={credentials.token}
+          onCardClick={() => setShowCameraModal(true)}
+        />
+        <CameraStreamDialog
+          open={showCameraModal}
+          onOpenChange={setShowCameraModal}
+          entityId={device.entityId}
+          host={credentials.url.replace(/^https?:\/\//, '')}
+          token={credentials.token}
+        />
+      </>
+    );
+  }
 
   return (
     <div className={`device-card group ${!isOnline ? 'opacity-50' : ''}`}>
